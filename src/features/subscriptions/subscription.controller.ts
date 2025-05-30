@@ -11,7 +11,7 @@ const stripe = new Stripe(config.stripe.secretKey!);
 export const createSubscription = async (req: Request, res: Response) => {
   try {
     const { courseId } = req.params;
-    const userId = req.user._id;
+    const userId = req.user._id as string;
 
     if (!Types.ObjectId.isValid(courseId)) {
       return res.status(400).json({ message: "Invalid course ID" });
