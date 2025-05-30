@@ -1,5 +1,5 @@
 import "express";
-import { IUser } from "../../src/features/users/user.model";
+import { IUser } from "../features/users/user.model";
 
 declare module "express" {
   interface Request {
