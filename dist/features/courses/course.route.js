@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const course_controller_1 = require("./course.controller");
+const auth_middleware_1 = require("../../middlewares/auth.middleware");
+const multer_middleware_1 = __importDefault(require("../../middlewares/multer.middleware"));
+const zod_middelware_1 = require("../../middlewares/zod.middelware");
+const course_schemas_1 = require("../../schemas/course.schemas");
+const router = (0, express_1.Router)();
+router.get("/", course_controller_1.getCourses);
+router.get("/search", course_controller_1.searchCourses);
+router.post("/", auth_middleware_1.authMiddleware, multer_middleware_1.default.single("image"), (0, zod_middelware_1.validateRequestBody)(course_schemas_1.createCourseSchema), course_controller_1.createCourse);
+router.patch("/:id", auth_middleware_1.authMiddleware, multer_middleware_1.default.single("image"), (0, zod_middelware_1.validateRequestBody)(course_schemas_1.updateCourseSchema), course_controller_1.updateCourse);
+router.get("/category/:categoryId", course_controller_1.getCoursesByCategory);
+router.delete("/:id", auth_middleware_1.authMiddleware, course_controller_1.deleteCourseByID);
+router.get("/:id", course_controller_1.getCourseById);
+exports.default = router;
