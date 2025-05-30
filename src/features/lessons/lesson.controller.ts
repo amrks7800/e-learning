@@ -5,7 +5,6 @@ import { Course } from "../courses/course.model";
 import { updateLessonSchema } from "./lesson.schema";
 import { uploadToCloudinary } from "../../utils";
 import { Subscription } from "../subscriptions/subscription.model";
-import { IUser } from "../users/user.model";
 import { ObjectId } from "mongoose";
 
 export const createLesson = async (req: Request, res: Response) => {
@@ -20,7 +19,7 @@ export const createLesson = async (req: Request, res: Response) => {
 
     const videoUrl = response.secure_url;
 
-    const user: IUser = req.user;
+    const user = req.user;
 
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
