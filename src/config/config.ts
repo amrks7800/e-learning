@@ -32,6 +32,14 @@ export const config = {
     url: process.env.REDIS_URL,
     token: process.env.REDIS_TOKEN,
   },
+  bucket: {
+    name: process.env.BUCKET_NAME,
+    id: process.env.BUCKET_ID,
+    endpoint: process.env.BUCKET_ENDPOINT,
+    keyId: process.env.BUCKET_KEY_ID,
+    keySecret: process.env.BUCKET_KEY_SECRET,
+    region: process.env.BUCKET_REGION,
+  },
 } as const;
 
 // Type for the config object

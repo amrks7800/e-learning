@@ -5,6 +5,7 @@ export const registerSchema = z.object({
   email: z.string({ message: "Email is required" }).email(),
   password: z.string({ message: "Password is required" }).min(8),
   // .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+  role: z.enum(["student", "teacher", "admin"]).default("student"),
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

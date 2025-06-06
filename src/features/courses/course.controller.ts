@@ -4,11 +4,12 @@ import { z } from "zod";
 import { uploadToCloudinary } from "../../utils";
 import { UpdateCourseSchema } from "src/schemas/course.schemas";
 import { Schema } from "mongoose";
+import { uploadToS3 } from "../../utils/s3";
 
 export const createCourse = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
-    const image = req.file?.path;
+    const image = req.file;
 
     const user = req.user;
 
@@ -20,7 +21,7 @@ export const createCourse = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Missing image" });
     }
 
-    const result = await uploadToCloudinary(image);
+    const result = await uploadToS3(image);
 
     if (!result) {
       return res.status(500).json({ message: "Error uploading image" });
@@ -30,12 +31,6 @@ export const createCourse = async (req: Request, res: Response) => {
 
     if (!title || !description || !result.secure_url || !categories || !price) {
       return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    const urlSchema = z.string().url();
-
-    if (!urlSchema.safeParse(image).success) {
-      return res.status(400).json({ message: "Invalid image URL" });
     }
 
     const course = await Course.create({
@@ -118,14 +113,14 @@ export const updateCourse = async (
   res: Response
 ) => {
   const { id } = req.params;
-  const image = req.file?.path;
+  const image = req.file;
 
   let newCourse = {
     ...req.body,
   };
 
   if (image) {
-    const result = await uploadToCloudinary(image);
+    const result = await uploadToS3(image);
 
     if (!result) {
       return res.status(500).json({ message: "Error uploading image" });

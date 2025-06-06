@@ -59,7 +59,7 @@ export const registerUser = async (
   req: Request<any, any, RegisterSchema>,
   res: Response
 ) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   console.log(req.body);
 
@@ -75,7 +75,7 @@ export const registerUser = async (
     name,
     email,
     password: hashedPassword,
-    role: "student",
+    role,
   });
 
   if (!user) {

@@ -6,6 +6,7 @@ import { updateLessonSchema } from "./lesson.schema";
 import { uploadToCloudinary } from "../../utils";
 import { Subscription } from "../subscriptions/subscription.model";
 import { ObjectId } from "mongoose";
+import { uploadToS3 } from "../../utils/s3";
 
 export const createLesson = async (req: Request, res: Response) => {
   try {
@@ -15,7 +16,7 @@ export const createLesson = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Video is required" });
     }
 
-    const response = await uploadToCloudinary(req.file.path);
+    const response = await uploadToS3(req.file);
 
     const videoUrl = response.secure_url;
 
@@ -163,7 +164,10 @@ export const updateLesson = async (req: Request, res: Response) => {
     const updateData = updateLessonSchema.parse(req.body);
 
     if (req.file) {
-      const response = await uploadToCloudinary(req.file.path);
+      const response = await uploadToS3(req.file);
+      if (!response) {
+        return res.status(500).json({ message: "Error uploading video" });
+      }
       const videoUrl = response.secure_url;
       updateData.videoUrl = videoUrl;
     }
